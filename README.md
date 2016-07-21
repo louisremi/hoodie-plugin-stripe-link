@@ -5,8 +5,10 @@ A simple Hoodie plugin that references a Stripe customerId in the corresponding 
 
 ## Usage
 
-1. Register this plugin as a webhook receiver inside Stripe (see [Stripe docs](https://stripe.com/docs/webhooks)): `https://<server url>/_api/_plugins/stripe-link/_api`.
-2. When creating a Stripe customer, make sure to provide a "hoodieId" in its metadata: `{ metadata: { hoodieId: '<hoodieId>' } }`.
+1. Register this plugin as a webhook receiver inside Stripe (see [Stripe docs](https://stripe.com/docs/webhooks)):  
+`https://<server url>/_api/_plugins/stripe-link/_api`.
+2. When creating a Stripe customer, make sure to provide a "hoodieId" in its metadata:  
+`{ metadata: { hoodieId: '<hoodieId>' } }`.
 
 Next time you use `hoodie.account.fetch`, you will receive a userDoc containing the customerId of the user.
 Please note that:
