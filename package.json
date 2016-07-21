@@ -1,0 +1,16 @@
+{
+  "name": "hoodie-plugin-stripe-link",
+  "version": "1.0.0",
+  "description": "A simple Hoodie plugin that references a Stripe customerId in the corresponding Hoodie user",
+  "main": "worker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hoodie",
+    "plugin",
+    "stripe"
+  ],
+  "author": "@louis_remi",
+  "license": "MIT"
+}
