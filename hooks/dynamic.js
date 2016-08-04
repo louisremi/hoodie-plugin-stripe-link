@@ -46,9 +46,31 @@ module.exports = function( hoodie ) {
 				cuses Hoodie to return a 500 error.
 		*/
 		'server.api.plugin-request': function(request, reply) {
+			// handle username exist requests
+			if ( 'username' in request.payload ) {
+				return Promise.promisify(
+					hoodie.account.find
+				)(
+					'user',
+					request.payload.username
+				)
+				.then(function() {
+					reply( null, { isExisting: true });
+				})
+				.catch(function( error ) {
+					if ( error.error === 'not_found' ) {
+						reply( null, { isExisting: true });
+					}
+					else {
+						reply( error );
+					}
+				});
+			}
+
+
 			var event = request.payload;
 
-			// ignore all events except customer creation
+			// ignore all events except customer create and update
 			if (
 				!('type' in event) ||
 				!/^customer\.(cre|upd)ated$/.test(event.type)
@@ -72,15 +94,16 @@ module.exports = function( hoodie ) {
 				// In case of race conditions, don't overwrite the initial
 				// customerId
 				if (
-					'customerId' in userDoc &&
+					'stripe' in userDoc &&
+					'customerId' in userDoc.stripe &&
 					event.type === 'customer.created'
 				) {
 					return reply(new Error(
-						'user already linked to customer: ' + userDoc.customerId
+						'user already linked to customer: ' + userDoc.stripe.customerId
 					));
 				}
 
-				userDoc.customerId = event.data.object.id;
+				userDoc.stripe = { customerId: event.data.object.id };
 
 				hoodie.account.update('user', username, userDoc, function(error) {
 					if (error) {
