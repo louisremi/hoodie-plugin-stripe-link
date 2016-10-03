@@ -1,3 +1,5 @@
+var promisify = require('es6-promisify')
+
 /*
 	Hooks allow you to alter the behaviour of hoodie-server,
 	Hoodie’s core backend module.
@@ -47,8 +49,8 @@ module.exports = function( hoodie ) {
 		*/
 		'server.api.plugin-request': function(request, reply) {
 			// handle username exist requests
-			if ( 'username' in request.payload ) {
-				return Promise.promisify(
+			if (request.payload && 'username' in request.payload) {
+				return promisify(
 					hoodie.account.find
 				)(
 					'user',
@@ -59,7 +61,7 @@ module.exports = function( hoodie ) {
 				})
 				.catch(function( error ) {
 					if ( error.error === 'not_found' ) {
-						reply( null, { isExisting: true });
+						reply( null, { isExisting: false });
 					}
 					else {
 						reply( error );
@@ -67,8 +69,7 @@ module.exports = function( hoodie ) {
 				});
 			}
 
-
-			var event = request.payload;
+			var event = (request.payload && request.payload.object) || {};
 
 			// ignore all events except customer create and update
 			if (
@@ -103,7 +104,7 @@ module.exports = function( hoodie ) {
 					));
 				}
 
-				userDoc.stripe = { customerId: event.data.object.id };
+				userDoc.stripe = { customerId: event.data.object.customer };
 
 				hoodie.account.update('user', username, userDoc, function(error) {
 					if (error) {
