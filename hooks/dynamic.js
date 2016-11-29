@@ -79,7 +79,8 @@ module.exports = function( hoodie ) {
 				return reply( null, 'event ignored' );
 			}
 
-			var username = event.data.object.metadata.hoodieId;
+			var object = event.data.object;
+			var username = object.metadata.username || object.email;
 
 			if ( !username ) {
 				return reply(new Error(

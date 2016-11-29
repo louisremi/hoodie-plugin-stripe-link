@@ -97,7 +97,7 @@ describe('Webhook Stripe', () => {
   beforeEach((done) => {
     randomSignUp()
       .then((hoodieUser) => {
-        defaultEvent.data.object.metadata.hoodieId = hoodieUser.username;
+        defaultEvent.data.object.email = hoodieUser.username;
         done();
       })
       .catch(done);
