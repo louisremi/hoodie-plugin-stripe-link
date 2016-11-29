@@ -69,7 +69,7 @@ module.exports = function( hoodie ) {
 				});
 			}
 
-			var event = (request.payload && request.payload.object) || {};
+			var event = request.payload;
 
 			// ignore all events except customer create and update
 			if (
@@ -104,7 +104,7 @@ module.exports = function( hoodie ) {
 					));
 				}
 
-				userDoc.stripe = { customerId: event.data.object.customer };
+				userDoc.stripe = { customerId: event.data.object.id };
 
 				hoodie.account.update('user', username, userDoc, function(error) {
 					if (error) {

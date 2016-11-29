@@ -84,22 +84,20 @@ describe('Username existence', () => {
 
 describe('Webhook Stripe', () => {
   let defaultEvent = {
-    object: {
-      "data": {
-        "object": {
-          "customer": `cus_${Math.round(Math.random() * 1E9)}`,
-          "metadata": {}
-        },
+    "data": {
+      "object": {
+        "id": `cus_${Math.round(Math.random() * 1E9)}`,
+        "metadata": {}
       },
-      "type": "customer.created",
-    }
+    },
+    "type": "customer.created",
   };
 
   // beforeEach to avoid update conflicts
   beforeEach((done) => {
     randomSignUp()
       .then((hoodieUser) => {
-        defaultEvent.object.data.object.metadata.hoodieId = hoodieUser.username;
+        defaultEvent.data.object.metadata.hoodieId = hoodieUser.username;
         done();
       })
       .catch(done);
