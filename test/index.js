@@ -104,7 +104,7 @@ describe('Webhook Stripe', () => {
   });
 
   const sendEvent = (eventName = 'customer.created') => {
-    defaultEvent.object.type = eventName;
+    defaultEvent.type = eventName;
     return fetch(`${HOODIE_URL}/_api/_plugins/stripe-link/_api`, {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
